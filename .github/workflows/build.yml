@@ -19,12 +19,12 @@ jobs:
       packages: write
       attestations: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       # calculate the short sha for the latest commit
       - name: Set commit sha_short
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
