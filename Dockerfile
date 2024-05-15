@@ -7,4 +7,4 @@ COPY requirements.txt .
 RUN ["pip", "install", "-r", "requirements.txt"]
 RUN ["chmod", "+x", "run.sh"]
 
-ENTRYPOINT ["/d5dk8s/run.sh"]
+ENTRYPOINT ["python -m /d5dk8s"]
