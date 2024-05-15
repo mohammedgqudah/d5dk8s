@@ -2,7 +2,9 @@ name: Build and push image
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - 'main'
+      - "*"
     tags:
       - "v*.*.*"
 
@@ -33,13 +35,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+        # the latest tag is only applied for the main branch and git tags
+      - name: Determine latest tag
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" || "${GITHUB_REF}" == refs/tags/v*.*.* ]]; then
+            echo "LATEST_TAG=ghcr.io/${{ github.repository }}:latest" >> $GITHUB_ENV
+          else
+            echo "LATEST_TAG=" >> $GITHUB_ENV
+          fi
+
+        # Setup QEMU to support x86 and ARM builds
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and push the image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
+          # update the latest tag only if this is the main branch or this is a tag
           tags: |
-            ghcr.io/mohammedgqudah/d5dk8s:latest
+            ${{ env.LATEST_TAG }}
             ghcr.io/mohammedgqudah/d5dk8s:${{ env.sha_short }}
             ghcr.io/mohammedgqudah/d5dk8s:${{ github.ref_name }}
+

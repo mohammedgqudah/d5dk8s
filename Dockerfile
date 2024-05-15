@@ -1,10 +1,11 @@
-FROM python:3.11-alpine
+FROM python:3.11-slim-bullseye
 WORKDIR /d5dk8s
 
 COPY d5dk8s .
 COPY requirements.txt .
 
 RUN ["pip", "install", "-r", "requirements.txt"]
-RUN ["chmod", "+x", "run.sh"]
 
-ENTRYPOINT ["/d5dk8s/run.sh"]
+WORKDIR /
+
+ENTRYPOINT ["python", "-m", "d5dk8s"]

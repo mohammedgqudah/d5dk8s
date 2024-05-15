@@ -4,7 +4,18 @@ A discord bot to inspect a kubernetes cluster (an experiment)
 > The motive behind this bot is to learn more about the kubernetes API server and service accounts.
 
 
-## Deploying
+## Testing - Locally
+Start a proxy server
+```
+k proxy 8000 &
+```
+Start the bot
+```
+export K8S_API_SERVER='http://localhost:8001'
+python -m d5dk8s
+```
+
+## Deploying - Kubernetes
 ```yml
 # secret.yml
 
