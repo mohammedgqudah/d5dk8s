@@ -41,7 +41,8 @@ jobs:
         with:
           context: .
           push: true
+          # update the latest tag only if this is the main branch or this is a tag
           tags: |
-            ghcr.io/mohammedgqudah/d5dk8s:latest
+            ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') && format('ghcr.io/{0}:latest', github.repository) }}
             ghcr.io/mohammedgqudah/d5dk8s:${{ env.sha_short }}
             ghcr.io/mohammedgqudah/d5dk8s:${{ github.ref_name }}
