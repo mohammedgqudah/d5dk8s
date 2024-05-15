@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.11-slim-bullseye
 WORKDIR /d5dk8s
 
 COPY d5dk8s .
