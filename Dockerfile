@@ -6,4 +6,6 @@ COPY requirements.txt .
 
 RUN ["pip", "install", "-r", "requirements.txt"]
 
-ENTRYPOINT ["python -m /d5dk8s"]
+WORKDIR /
+
+ENTRYPOINT ["python", "-m", "d5dk8s"]
