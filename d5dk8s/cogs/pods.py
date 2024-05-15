@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from d5dk8s.kubernetes import session
+from d5dk8s.kubernetes import get_pods
 
 
 class Pods(commands.Cog):
@@ -9,12 +9,7 @@ class Pods(commands.Cog):
 
     @commands.slash_command()
     async def pods(self, ctx: discord.ApplicationContext, namespace: str = "default"):
-        url = f"/api/v1/namespaces/{namespace}/pods"
-        r = session.get(url)
-
-        print('response', r.json())
-
-        pods = r.json()['items']
+        pods = await get_pods(namespace)
         embed = discord.Embed(title="Pods", color=0x447ceb)
         
         for pod in pods:
