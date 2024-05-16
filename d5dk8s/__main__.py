@@ -9,6 +9,7 @@ async def on_ready():
 
 
 bot.load_extension("d5dk8s.cogs.pods")
+bot.load_extension("d5dk8s.cogs.nodes")
 
 print('Running the bot..')
 

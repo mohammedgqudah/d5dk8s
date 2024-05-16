@@ -31,3 +31,10 @@ async def get_pods(namespace: str):
     async with session.get(url) as r:
         json = await r.json()
         return json['items']
+
+async def get_nodes():
+    url = f"/api/v1/nodes"
+    async with session.get(url) as r:
+        json = await r.json()
+        return json['items']
+
