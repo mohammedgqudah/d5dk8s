@@ -1,12 +1,8 @@
-import os
 import aiohttp
 import ssl
+from d5dk8s.config import Config
 
-
-token = os.getenv('D5DK8S_BOT_TOKEN')
-api_server: str = os.getenv('K8S_API_SERVER')
-
-session = aiohttp.ClientSession(base_url=api_server)
+session = aiohttp.ClientSession(base_url=Config.get('api_server'))
 
 token_path = '/var/run/secrets/kubernetes.io/serviceaccount/token'
 ca_cert_path = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'

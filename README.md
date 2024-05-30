@@ -6,12 +6,15 @@ A discord bot to inspect a kubernetes cluster (an experiment)
 
 ## Testing - Locally
 Start a proxy server
+```bash
+kubectl proxy 8000 --accept-hosts='^localhost$,^127\.0\.0\.1$,^\[::1\]$,^host.docker.internal$' &
+# if using prometheus
+kubectl port-forward svc/prometheus 8002:80 &
 ```
-k proxy 8000 &
-```
+
 Start the bot
-```
-export K8S_API_SERVER='http://localhost:8001'
+```bash
+export D5DK8S_CONFIG_API_SERVER='http://localhost:8001'
 python -m d5dk8s
 ```
 
@@ -24,7 +27,7 @@ kind: Secret
 metadata:
   name: d5dk8s-secret
 stringData:
-  D5DK8S_BOT_TOKEN: "secretBotToken"
+  D5DK8S_CONFIG_BOT_TOKEN: "secretBotToken"
 ```
 
 ```yml
@@ -46,14 +49,23 @@ spec:
       serviceAccountName: d5dk8s
       containers:
         - name: d5dk8s
-          image: ghcr.io/mohammedgqudah/d5dk8s:latest
+          image: ghcr.io/mohammedgqudah/d5dk8s:latest  
+          args:
+            - "--config=/etc/d5dk8s/d5dk8s.yml"
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
                 name: d5dk8s-secret
           env:
-            - name: K8S_API_SERVER
+            - name: D5DK8S_CONFIG_API_SERVER
               value: "https://kubernetes.default.svc"
+          volumeMounts:
+            - name: d5dk8s-config
+              mountPath: /etc/d5dk8s
+      volumes:
+        - name: d5dk8s-config
+          configMap:
+            name: d5dk8s-config
 ```
 
 ```yml

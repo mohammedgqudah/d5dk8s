@@ -1,0 +1,7 @@
+# the kubernetes api server
+api_server: "http://host.docker.internal:8001"
+
+prometheus:
+  # enable prometheus-based commands, such as the temperature command
+  enabled: true
+  url: http://host.docker.internal:8002
