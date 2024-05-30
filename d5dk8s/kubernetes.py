@@ -13,7 +13,7 @@ try:
 
     # if the bot is running inside a cluster.
     ssl_context = ssl.create_default_context(cafile=ca_cert_path)
-    session = aiohttp.ClientSession(base_url=api_server, connector=aiohttp.TCPConnector(ssl=ssl_context))
+    session = aiohttp.ClientSession(base_url=Config.get('api_server'), connector=aiohttp.TCPConnector(ssl=ssl_context))
     session.headers.update({
         'Authorization': f'Bearer {token}',
     })
