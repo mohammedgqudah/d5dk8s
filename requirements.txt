@@ -1,3 +1,4 @@
 aiohttp
 aiodns
 py-cord
+pyyaml

@@ -1,0 +1,12 @@
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./d5dk8s:/d5dk8s
+      - ./d5dk8s.yml:/etc/d5dk8s/d5dk8s.yml
+    env_file:
+      - .env
+    command:
+      - "--config=/etc/d5dk8s/d5dk8s.yml"
+    tty: true
