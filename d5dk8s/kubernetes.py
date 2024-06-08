@@ -22,13 +22,13 @@ except FileNotFoundError as e:
     print("Couldn't find the service token");
 
 
-async def get_pods(namespace: str):
+async def get_pods(namespace: str) -> list:
     url = f"/api/v1/namespaces/{namespace}/pods"
     async with session.get(url) as r:
         json = await r.json()
         return json['items']
 
-async def get_nodes():
+async def get_nodes() -> list:
     url = f"/api/v1/nodes"
     async with session.get(url) as r:
         json = await r.json()
