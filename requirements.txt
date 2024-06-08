@@ -2,3 +2,8 @@ aiohttp
 aiodns
 py-cord
 pyyaml
+sqlalchemy[asyncio]
+aiosqlite
+alembic
+asyncpg
+psycopg2-binary

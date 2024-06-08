@@ -102,3 +102,11 @@ subjects:
   name: d5dk8s
   namespace: default
 ```
+
+
+## Development
+
+### Auto generating migrations
+```
+docker exec --tty -i d5dk8s-bot-1 alembic revision --autogenerate -m "MESSAGE"
+```

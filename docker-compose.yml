@@ -10,3 +10,18 @@ services:
     command:
       - "--config=/etc/d5dk8s/d5dk8s.yml"
     tty: true
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
