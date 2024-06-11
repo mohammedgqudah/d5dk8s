@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from d5dk8s.kubernetes import get_nodes
+from bot.kubernetes import get_nodes
 
 
 class Nodes(commands.Cog):

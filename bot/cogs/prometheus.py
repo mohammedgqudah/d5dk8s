@@ -1,7 +1,7 @@
 from typing import Optional
 import discord
 from discord.ext import commands
-from d5dk8s import prometheus as prom
+from bot import prometheus as prom
 
 class Prometheus(commands.Cog):
     def __init__(self, bot):
