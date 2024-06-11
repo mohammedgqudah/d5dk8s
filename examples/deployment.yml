@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-inspector-bot
+spec:
+  selector:
+    matchLabels:
+      app: kube-inspector-bot
+  template:
+    metadata:
+      labels:
+        app: kube-inspector-bot
+    spec:
+      serviceAccountName: kube-inspector-bot
+      containers:
+        - name: kube-inspector-bot
+          image: ghcr.io/mohammedgqudah/kube-inspector-bot:latest  
+          args:
+            - "--config=/etc/kube-inspector-bot/bot.yml"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: kube-inspector-bot-secret
+          env:
+            - name: BOT_CONFIG_API_SERVER
+              value: "https://kubernetes.default.svc"
+          volumeMounts:
+            - name: kube-inspector-bot-config
+              mountPath: /etc/kube-inspector-bot
+      volumes:
+        - name: kube-inspector-bot-config
+          configMap:
+            name: kube-inspector-bot-config
