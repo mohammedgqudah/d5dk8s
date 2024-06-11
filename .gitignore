@@ -1,5 +1,5 @@
 venv/
 .env
 __pycache__/
-d5dk8s.yml
+bot.yml
 postgresql
