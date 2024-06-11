@@ -6,8 +6,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from d5dk8s.database.meta import meta
-import d5dk8s.database.tables
+from bot.database.meta import meta
+import bot.database.tables
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,7 +30,7 @@ target_metadata = meta
 # ... etc.
 
 if config.get_main_option('sqlalchemy.url') is None:
-    config.set_main_option('sqlalchemy.url', os.environ.get('D5DK8S_CONFIG_DATABASE_URL').replace('+asyncpg', '', 1))
+    config.set_main_option('sqlalchemy.url', os.environ.get('BOT_CONFIG_DATABASE_URL').replace('+asyncpg', '', 1))
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.

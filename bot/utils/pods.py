@@ -1,6 +1,6 @@
 import discord
 
-from d5dk8s.utils.helpers import chunk
+from bot.utils.helpers import chunk
 
 def pods_to_embed(pods):
     """Create an embed containing a list of pods."""

@@ -14,10 +14,10 @@ class Config:
     def get(cls, key, default=None) -> Any:
         """Gets a config value from environment variables or YML config.
         
-        example: D5DK8S_CONFIG_PROMETHEUS_URL=prometheus.default.svc.cluster.local
+        example: BOT_CONFIG_PROMETHEUS_URL=prometheus.default.svc.cluster.local
         """
         # check if the value is set in the environment variables first
-        env_value = os.getenv('D5DK8S_CONFIG_' + key.replace('.', '_').upper())
+        env_value = os.getenv('BOT_CONFIG_' + key.replace('.', '_').upper())
         if env_value is not None:
             return env_value
 

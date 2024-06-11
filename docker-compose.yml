@@ -3,12 +3,12 @@ services:
     build: .
     restart: unless-stopped
     volumes:
-      - ./d5dk8s:/d5dk8s
-      - ./d5dk8s.yml:/etc/d5dk8s/d5dk8s.yml
+      - ./bot:/bot
+      - ./bot.yml:/etc/bot/bot.yml
     env_file:
       - .env
     command:
-      - "--config=/etc/d5dk8s/d5dk8s.yml"
+      - "--config=/etc/bot/bot.yml"
     tty: true
     depends_on:
       - postgres

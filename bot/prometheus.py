@@ -1,4 +1,4 @@
-from d5dk8s.config import Config
+from bot.config import Config
 import aiohttp
 
 

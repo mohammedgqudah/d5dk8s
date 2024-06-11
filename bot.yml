@@ -1,0 +1,12 @@
+# the kubernetes api server
+api_server: "http://host.docker.internal:8001"
+guild_ids:
+- 1177629453124378634
+
+prometheus:
+  # enable prometheus-based commands, such as the temperature command
+  enabled: true
+  url: http://host.docker.internal:8002
+
+database:
+  url: 

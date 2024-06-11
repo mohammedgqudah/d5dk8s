@@ -4,12 +4,12 @@ import discord
 from discord.ext import commands, tasks
 from sqlalchemy import insert, update
 from sqlalchemy.ext.asyncio.engine import AsyncConnection
-from d5dk8s.kubernetes import get_pods
-from d5dk8s.database.database import engine
-from d5dk8s.database.tables import ResourceType, watchers
-from d5dk8s.config import Config
-from d5dk8s.utils.messages import get_message
-from d5dk8s.utils.pods import pods_to_embeds
+from bot.kubernetes import get_pods
+from bot.database.database import engine
+from bot.database.tables import ResourceType, watchers
+from bot.config import Config
+from bot.utils.messages import get_message
+from bot.utils.pods import pods_to_embeds
 
 logging.basicConfig(level=logging.INFO)
 logging.root.setLevel(logging.DEBUG)

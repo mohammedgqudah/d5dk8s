@@ -1,11 +1,11 @@
 import pathlib
 import argparse
 import discord
-from d5dk8s.config import Config
+from bot.config import Config
 from alembic import config, command
 
 parser = argparse.ArgumentParser(
-    prog="d5dk8s",
+    prog="kube-inspector-bot",
     description="A discord bot that inspects your kubernetes cluster",
 )
 parser.add_argument('-c', '--config') # yml configuration file
@@ -30,10 +30,10 @@ def run_bot():
         print(f"Logged in as {bot.user}")
 
 
-    bot.load_extension("d5dk8s.cogs.pods")
-    bot.load_extension("d5dk8s.cogs.nodes")
+    bot.load_extension("bot.cogs.pods")
+    bot.load_extension("bot.cogs.nodes")
     if Config.get('prometheus.enabled'):
-        bot.load_extension("d5dk8s.cogs.prometheus")
+        bot.load_extension("bot.cogs.prometheus")
 
     bot.run(Config.get('bot_token'))
 

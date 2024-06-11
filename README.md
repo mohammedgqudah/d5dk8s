@@ -14,8 +14,8 @@ kubectl port-forward svc/prometheus 8002:80 &
 
 Start the bot
 ```bash
-export D5DK8S_CONFIG_API_SERVER='http://localhost:8001'
-python -m d5dk8s
+export BOT_CONFIG_API_SERVER='http://localhost:8001'
+python -m bot
 ```
 
 ## Deploying - Kubernetes
@@ -25,9 +25,9 @@ python -m d5dk8s
 apiVersion: v1
 kind: Secret
 metadata:
-  name: d5dk8s-secret
+  name: kube-inspector-bot-secret
 stringData:
-  D5DK8S_CONFIG_BOT_TOKEN: "secretBotToken"
+  BOT_CONFIG_BOT_TOKEN: "secretBotToken"
 ```
 
 ```yml
@@ -36,36 +36,36 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: d5dk8s
+  name: kube-inspector-bot
 spec:
   selector:
     matchLabels:
-      app: d5dk8s
+      app: kube-inspector-bot
   template:
     metadata:
       labels:
-        app: d5dk8s
+        app: kube-inspector-bot
     spec:
-      serviceAccountName: d5dk8s
+      serviceAccountName: kube-inspector-bot
       containers:
-        - name: d5dk8s
-          image: ghcr.io/mohammedgqudah/d5dk8s:latest  
+        - name: kube-inspector-bot
+          image: ghcr.io/mohammedgqudah/kube-inspector-bot:latest  
           args:
-            - "--config=/etc/d5dk8s/d5dk8s.yml"
+            - "--config=/etc/kube-inspector-bot/bot.yml"
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
-                name: d5dk8s-secret
+                name: kube-inspector-bot-secret
           env:
-            - name: D5DK8S_CONFIG_API_SERVER
+            - name: BOT_CONFIG_API_SERVER
               value: "https://kubernetes.default.svc"
           volumeMounts:
-            - name: d5dk8s-config
-              mountPath: /etc/d5dk8s
+            - name: kube-inspector-bot-config
+              mountPath: /etc/kube-inspector-bot
       volumes:
-        - name: d5dk8s-config
+        - name: kube-inspector-bot-config
           configMap:
-            name: d5dk8s-config
+            name: kube-inspector-bot-config
 ```
 
 ```yml
@@ -74,7 +74,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: d5dk8s
+  name: kube-inspector-bot
 ---
 # cluster-role.yml
 
@@ -92,14 +92,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: d5dk8s-discoverer
+  name: kube-inspector-bot-discoverer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: discoverer
 subjects:
 - kind: ServiceAccount
-  name: d5dk8s
+  name: kube-inspector-bot
   namespace: default
 ```
 

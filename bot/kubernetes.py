@@ -1,6 +1,6 @@
 import aiohttp
 import ssl
-from d5dk8s.config import Config
+from bot.config import Config
 
 session = aiohttp.ClientSession(base_url=Config.get('api_server'))
 
