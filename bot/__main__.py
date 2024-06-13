@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(
     prog="kube-inspector-bot",
     description="A discord bot that inspects your kubernetes cluster",
 )
-parser.add_argument('-c', '--config') # yml configuration file
+parser.add_argument("-c", "--config")  # yml configuration file
 args = parser.parse_args()
 if args.config:
     load_config(args.config)
@@ -16,14 +16,18 @@ if args.config:
 
 from bot.config import config
 
+
 def run_migrations():
-    alembic_config = ac_config.Config(pathlib.Path().joinpath('..').joinpath('alembic.ini'))
+    alembic_config = ac_config.Config(
+        pathlib.Path().joinpath("..").joinpath("alembic.ini")
+    )
     db_url = config.database.url
     # use the sync driver for running the migrations
     db_url = db_url.replace("+asyncpg", "", 1)
 
-    alembic_config.set_main_option('sqlalchemy.url', db_url)
-    command.upgrade(alembic_config, 'head')
+    alembic_config.set_main_option("sqlalchemy.url", db_url)
+    command.upgrade(alembic_config, "head")
+
 
 def run_bot():
     bot = discord.Bot()
@@ -31,7 +35,6 @@ def run_bot():
     @bot.event
     async def on_ready():
         print(f"Logged in as {bot.user}")
-
 
     bot.load_extension("bot.cogs.pods")
     bot.load_extension("bot.cogs.nodes")

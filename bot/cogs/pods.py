@@ -20,6 +20,7 @@ async def list_watchers(connection: AsyncConnection):
     result = await connection.execute(watchers.select())
     return result.fetchall()
 
+
 class Pods(commands.Cog):
     bot: discord.Bot
 
@@ -30,13 +31,23 @@ class Pods(commands.Cog):
     pods = discord.SlashCommandGroup(name="pods", guild_ids=config.guild_ids)
 
     @pods.command(name="list")
-    async def _list(self, ctx: discord.ApplicationContext, namespace: str = "default") -> discord.Interaction | discord.WebhookMessage:
+    async def _list(
+        self, ctx: discord.ApplicationContext, namespace: str = "default"
+    ) -> discord.Interaction | discord.WebhookMessage:
         pods = await get_pods(namespace)
 
         return await ctx.respond(embeds=pods_to_embeds(pods))
 
-    @pods.command(name="watch", description="Monitor pods by sending a message that refreshes at the specified interval")
-    async def watch(self, ctx: discord.ApplicationContext, namespace: str, refresh_interval: discord.Option(int, description="In minutes")):
+    @pods.command(
+        name="watch",
+        description="Monitor pods by sending a message that refreshes at the specified interval",
+    )
+    async def watch(
+        self,
+        ctx: discord.ApplicationContext,
+        namespace: str,
+        refresh_interval: discord.Option(int, description="In minutes"),
+    ):
         """Register a new watcher for pods."""
         pods = await get_pods(namespace)
 
@@ -48,7 +59,7 @@ class Pods(commands.Cog):
         async with engine.connect() as conn:
             # insert a new watcher, which will be periodically checked in `self.update_watchers`
             stmt = insert(watchers).values(
-                message_id=message.id, 
+                message_id=message.id,
                 channel_id=message.channel.id,
                 guild_id=message.guild.id,
                 refresh_interval_seconds=refresh_interval * 60,
@@ -66,19 +77,31 @@ class Pods(commands.Cog):
             logging.info(f"found {len(result)} watchers")
 
             for watcher in result:
-                time_since_last_refresh: timedelta = (datetime.now() - watcher.last_refresh_time)
+                time_since_last_refresh: timedelta = (
+                    datetime.now() - watcher.last_refresh_time
+                )
                 if time_since_last_refresh.seconds > watcher.refresh_interval_seconds:
-                    logging.info(f"updating watcher #{watcher.id} for namespace {watcher.namespace}")
-                    message = await get_message(self.bot, watcher.guild_id, watcher.channel_id, watcher.message_id)
+                    logging.info(
+                        f"updating watcher #{watcher.id} for namespace {watcher.namespace}"
+                    )
+                    message = await get_message(
+                        self.bot,
+                        watcher.guild_id,
+                        watcher.channel_id,
+                        watcher.message_id,
+                    )
 
                     pods = await get_pods(watcher.namespace)
                     await message.edit(embeds=pods_to_embeds(pods))
 
-                    stmt = update(watchers).where(watchers.c.id == watcher.id).values(last_refresh_time=datetime.now())
+                    stmt = (
+                        update(watchers)
+                        .where(watchers.c.id == watcher.id)
+                        .values(last_refresh_time=datetime.now())
+                    )
                     await conn.execute(stmt)
                     await conn.commit()
 
 
 def setup(bot):
     bot.add_cog(Pods(bot))
-
