@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio.engine import AsyncConnection
 from bot.kubernetes import get_pods
 from bot.database.database import engine
 from bot.database.tables import ResourceType, watchers
-from bot.config import Config
+from bot.config import config
 from bot.utils.messages import get_message
 from bot.utils.pods import pods_to_embeds
 
@@ -27,7 +27,7 @@ class Pods(commands.Cog):
         self.bot = bot
         self.update_watchers.start()
 
-    pods = discord.SlashCommandGroup(name="pods", guild_ids=Config.get('guild_ids'))
+    pods = discord.SlashCommandGroup(name="pods", guild_ids=config.guild_ids)
 
     @pods.command(name="list")
     async def _list(self, ctx: discord.ApplicationContext, namespace: str = "default") -> discord.Interaction | discord.WebhookMessage:

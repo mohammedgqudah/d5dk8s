@@ -1,8 +1,8 @@
-from bot.config import Config
+from bot.config import config
 import aiohttp
 
 
-session = aiohttp.ClientSession(base_url=Config.get('prometheus.url'))
+session = aiohttp.ClientSession(base_url=config.prometheus.url)
 
 async def query(_query: str):
     """Performs a prometheus query"""

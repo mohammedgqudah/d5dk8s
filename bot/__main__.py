@@ -1,8 +1,8 @@
 import pathlib
 import argparse
 import discord
-from bot.config import Config
-from alembic import config, command
+from bot.config import load_config
+from alembic import config as ac_config, command
 
 parser = argparse.ArgumentParser(
     prog="kube-inspector-bot",
@@ -11,11 +11,14 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-c', '--config') # yml configuration file
 args = parser.parse_args()
 if args.config:
-    Config.load_config(args.config)
+    load_config(args.config)
+
+
+from bot.config import config
 
 def run_migrations():
-    alembic_config = config.Config(pathlib.Path().joinpath('..').joinpath('alembic.ini'))
-    db_url = Config.get('database.url')
+    alembic_config = ac_config.Config(pathlib.Path().joinpath('..').joinpath('alembic.ini'))
+    db_url = config.database.url
     # use the sync driver for running the migrations
     db_url = db_url.replace("+asyncpg", "", 1)
 
@@ -32,10 +35,10 @@ def run_bot():
 
     bot.load_extension("bot.cogs.pods")
     bot.load_extension("bot.cogs.nodes")
-    if Config.get('prometheus.enabled'):
+    if config.prometheus.enabled:
         bot.load_extension("bot.cogs.prometheus")
 
-    bot.run(Config.get('bot_token'))
+    bot.run(config.bot_token)
 
 
 run_migrations()

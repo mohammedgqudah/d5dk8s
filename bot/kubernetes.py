@@ -1,8 +1,8 @@
 import aiohttp
 import ssl
-from bot.config import Config
+from bot.config import config
 
-session = aiohttp.ClientSession(base_url=Config.get('api_server'))
+session = aiohttp.ClientSession(base_url=config.api_server)
 
 token_path = '/var/run/secrets/kubernetes.io/serviceaccount/token'
 ca_cert_path = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
@@ -13,7 +13,7 @@ try:
 
     # if the bot is running inside a cluster.
     ssl_context = ssl.create_default_context(cafile=ca_cert_path)
-    session = aiohttp.ClientSession(base_url=Config.get('api_server'), connector=aiohttp.TCPConnector(ssl=ssl_context))
+    session = aiohttp.ClientSession(base_url=config.api_server, connector=aiohttp.TCPConnector(ssl=ssl_context))
     session.headers.update({
         'Authorization': f'Bearer {token}',
     })

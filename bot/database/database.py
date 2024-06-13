@@ -1,4 +1,4 @@
 from sqlalchemy.ext.asyncio import create_async_engine
-from bot.config import Config
+from bot.config import config
 
-engine = create_async_engine(Config.get('database.url'), echo=False)
+engine = create_async_engine(config.database.url, echo=False)
