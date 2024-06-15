@@ -1,4 +1,4 @@
-from typing import Any, List, Type, Tuple
+from typing import List, Type, Tuple
 import pydantic
 from pydantic_settings import (
     BaseSettings,
@@ -18,7 +18,7 @@ class Database(pydantic.BaseModel):
 
 
 class Config(BaseSettings):
-    api_server: str = pydantic.Field(...)
+    api_server: str = pydantic.Field(default="https://kubernetes.default.svc")
     bot_token: str = pydantic.Field(...)
     guild_ids: List[int] | None = None
 

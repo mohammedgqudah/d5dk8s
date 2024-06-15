@@ -1,7 +1,9 @@
 import aiohttp
 import ssl
+import logging
 from bot.config import config
 
+logger = logging.getLogger(__name__)
 session = aiohttp.ClientSession(base_url=config.api_server)
 
 token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
@@ -23,7 +25,7 @@ try:
     )
 except FileNotFoundError as e:
     # When running the bot locally through a proxy
-    print("Couldn't find the service token")
+    logger.info("Couldn't find the service token")
 
 
 async def get_pods(namespace: str) -> list:

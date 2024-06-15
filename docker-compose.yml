@@ -1,4 +1,15 @@
 services:
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
   bot:
     build: .
     restart: unless-stopped
@@ -12,16 +23,4 @@ services:
     tty: true
     depends_on:
       - postgres
-
-  postgres:
-    image: postgres
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - ./postgresql:/var/lib/postgresql/data
-    ports:
-      - 5433:5432
 
