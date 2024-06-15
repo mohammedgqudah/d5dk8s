@@ -11,8 +11,7 @@ from bot.config import config
 from bot.utils.messages import get_message
 from bot.utils.pods import pods_to_embeds
 
-logging.basicConfig(level=logging.INFO)
-logging.root.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 async def list_watchers(connection: AsyncConnection):
@@ -74,14 +73,14 @@ class Pods(commands.Cog):
     async def update_watchers(self):
         async with engine.connect() as conn:
             result = await list_watchers(conn)
-            logging.info(f"found {len(result)} watchers")
+            logger.info(f"found {len(result)} watchers")
 
             for watcher in result:
                 time_since_last_refresh: timedelta = (
                     datetime.now() - watcher.last_refresh_time
                 )
                 if time_since_last_refresh.seconds > watcher.refresh_interval_seconds:
-                    logging.info(
+                    logger.info(
                         f"updating watcher #{watcher.id} for namespace {watcher.namespace}"
                     )
                     message = await get_message(

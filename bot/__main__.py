@@ -1,8 +1,12 @@
-import pathlib
+import logging
 import argparse
+import subprocess
 import discord
 from bot.config import load_config
-from alembic import config as ac_config, command
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(message)s")
+logging.getLogger("discord").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(
     prog="kube-inspector-bot",
@@ -18,15 +22,19 @@ from bot.config import config
 
 
 def run_migrations():
-    alembic_config = ac_config.Config(
-        pathlib.Path().joinpath("..").joinpath("alembic.ini")
-    )
-    db_url = config.database.url
-    # use the sync driver for running the migrations
-    db_url = db_url.replace("+asyncpg", "", 1)
+    # I originally used the code below to run alembic, but env.py was messing
+    # with the logging module, so i had to use a separate process.
 
-    alembic_config.set_main_option("sqlalchemy.url", db_url)
-    command.upgrade(alembic_config, "head")
+    # alembic_config = ac_config.Config(
+    #    pathlib.Path().joinpath("..").joinpath("alembic.ini")
+    # )
+    # db_url = config.database.url
+    ## use the sync driver for running the migrations
+    # db_url = db_url.replace("+asyncpg", "", 1)
+
+    # alembic_config.set_main_option("sqlalchemy.url", db_url)
+    # command.upgrade(alembic_config, "head")
+    subprocess.run(["alembic", "upgrade", "head"], check=True)
 
 
 def run_bot():
@@ -34,7 +42,7 @@ def run_bot():
 
     @bot.event
     async def on_ready():
-        print(f"Logged in as {bot.user}")
+        logger.info(f"Logged in as {bot.user}")
 
     bot.load_extension("bot.cogs.pods")
     bot.load_extension("bot.cogs.nodes")
