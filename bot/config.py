@@ -48,7 +48,7 @@ class Config(BaseSettings):
         )
 
 
-config: Config = None
+config: Config = Config()
 
 
 def load_config(yaml_file):

@@ -25,7 +25,8 @@ class Pods(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.update_watchers.start()
+        if config.database.url:
+            self.update_watchers.start()
 
     pods = discord.SlashCommandGroup(name="pods", guild_ids=config.guild_ids)
 

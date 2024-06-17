@@ -52,5 +52,7 @@ def run_bot():
     bot.run(config.bot_token)
 
 
-run_migrations()
+if config.database.url:
+    run_migrations()
+
 run_bot()
